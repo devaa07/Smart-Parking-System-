@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Parking Availability</title>
+    <style>
+      .parking-grid {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .parking-grid__slot {
+        width: 250px;
+        height: 250px;
+        margin-right: 10px;
+        border: 1px solid black;
+        position: relative;
+      }
+      /* .parking-grid__slot {
+        width: 250px;
+        height: 250px;
+        margin-right: 10px;
+        border: 1px solid black;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        font-size: 1.5em;
+        font-weight: bold;
+        color: #000;
+        text-align: center;
+      } */
+      .parking-grid__slot--taken {
+        background-color: #ff0000;
+        color: #fff;
+      }
+
+      .parking-grid__slot--taken img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      h1 {
+        font-size: 2em;
+        text-align: center;
+        margin-top: 30px;
+        /* color: rgb(239, 139, 89); */
+      }
+
+      label {
+        font-size: 1.2em;
+        font-weight: bold;
+        margin-top: 20px;
+        display: block;
+      }
+
+      select {
+        font-size: 1.2em;
+        padding: 5px;
+        margin-top: 10px;
+        border-radius: 5px;
+      }
+
+      button[type="submit"] {
+        font-size: 1.2em;
+        padding: 10px;
+        background-color: rgb(53, 157, 237);
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        margin-top: 10px;
+        cursor: pointer;
+      }
+
+      button[type="submit"]:hover {
+        background-color: #3e8e41;
+      }
+
+      p {
+        font-size: 1.2em;
+        margin-top: 20px;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Smart Parking System</h1>
+    {% if selected_slot %}
+      <p>Your car is parked in Slot: {{ selected_slot }}</p>
+      <div class="parking-grid">
+        {% for slot in range(1, 5) %}
+          {% if slot == selected_slot %}
+            <div class="parking-grid__slot parking-grid__slot--taken"><b>Slot {{ slot }}</b><img src="https://thumbs.dreamstime.com/b/car-view-above-vehicle-white-background-illustration-vector-81356873.jpg"></div>
+          {% else %}
+            {% if slot in available_slots %}
+              <div class="parking-grid__slot"><b>Slot {{ slot }}</b></div>
+            {% else %}
+              <div class="parking-grid__slot parking-grid__slot--taken"><img src="https://thumbs.dreamstime.com/b/car-view-above-vehicle-white-background-illustration-vector-81356873.jpg"></div>
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+      </div>
+      <form method="POST">
+        <br>
+        <label for="slot-number">Select Parking Slot:</label>
+        <select name="slot-number">
+          {% for slot in available_slots %}
+            {% if slot == selected_slot %}
+              <option value="{{ slot }}" selected>{{ slot }}</option>
+            {% else %}
+              <option value="{{ slot }}">{{ slot }}</option>
+            {% endif %}
+          {% endfor %}
+        </select>
+        <br><br>
+        <button type="submit">Park car</button>
+      </form>
+    {% else %}
+      <p>Select a slot to park your car:</p>
+      <div class="parking-grid">
+        {% for slot in range(1, 5) %}
+          {% if slot in available_slots %}
+            <div class="parking-grid__slot">Slot  {{ slot }}</div>
+          {% else %}
+            <div class="parking-grid__slot parking-grid__slot--taken"><img src="https://thumbs.dreamstime.com/b/car-view-above-vehicle-white-background-illustration-vector-81356873.jpg"></div>
+          {% endif %}
+        {% endfor %}
+      </div>
+      <form method="POST">
+        <br>
+        <label for="slot-number">Select Parking Slot:</label>
+        <select name="slot-number" id="slot-number">
+          {% for slot in available_slots %}
+            <option value="{{ slot }}">{{ slot }}</option>
+          {% endfor %}
+        </select>
+        
+        <br><br>
+        <button type="submit">Park Car</button>
+      </form>
+    {% endif %}
+    <br><br>
+    <p>Available Slots: {{ available_slots }}</p>
+  </body>
+</html>
