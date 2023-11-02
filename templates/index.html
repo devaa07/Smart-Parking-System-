@@ -91,7 +91,7 @@
     {% if selected_slot %}
       <p>Your car is parked in Slot: {{ selected_slot }}</p>
       <div class="parking-grid">
-        {% for slot in range(1, 5) %}
+        {% for slot in range(1, 11) %}
           {% if slot == selected_slot %}
             <div class="parking-grid__slot parking-grid__slot--taken"><b>Slot {{ slot }}</b><img src="https://thumbs.dreamstime.com/b/car-view-above-vehicle-white-background-illustration-vector-81356873.jpg"></div>
           {% else %}
@@ -103,25 +103,27 @@
           {% endif %}
         {% endfor %}
       </div>
-      <form method="POST">
-        <br>
-        <label for="slot-number">Select Parking Slot:</label>
-        <select name="slot-number">
-          {% for slot in available_slots %}
-            {% if slot == selected_slot %}
-              <option value="{{ slot }}" selected>{{ slot }}</option>
-            {% else %}
-              <option value="{{ slot }}">{{ slot }}</option>
-            {% endif %}
-          {% endfor %}
-        </select>
-        <br><br>
-        <button type="submit">Park car</button>
-      </form>
+      {% if available_slots %}
+        <form method="POST">
+          <br>
+          <label for="slot-number">Select Parking Slot:</label>
+          <select name="slot-number">
+            {% for slot in available_slots %}
+              {% if slot == selected_slot %}
+                <option value="{{ slot }}" selected>{{ slot }}</option>
+              {% else %}
+                <option value="{{ slot }}">{{ slot }}</option>
+              {% endif %}
+            {% endfor %}
+          </select>
+          <br><br>
+          <button type="submit">Park car</button>
+        </form>
+      {% endif %}
     {% else %}
-      <p>Select a slot to park your car:</p>
+      <!-- <p>Select a slot to park your car:</p> -->
       <div class="parking-grid">
-        {% for slot in range(1, 5) %}
+        {% for slot in range(1, 11) %}
           {% if slot in available_slots %}
             <div class="parking-grid__slot">Slot  {{ slot }}</div>
           {% else %}
@@ -129,20 +131,26 @@
           {% endif %}
         {% endfor %}
       </div>
-      <form method="POST">
-        <br>
-        <label for="slot-number">Select Parking Slot:</label>
-        <select name="slot-number" id="slot-number">
-          {% for slot in available_slots %}
-            <option value="{{ slot }}">{{ slot }}</option>
-          {% endfor %}
-        </select>
-        
-        <br><br>
-        <button type="submit">Park Car</button>
-      </form>
+      <!-- <p><strong>No Slots are available currently to park</strong></p> -->
+      <div>
+        <!-- <h1>No Slots are available currently to park..</h1> -->
+      </div> 
+      {% if available_slots %}
+        <form method="POST">
+          <br>
+          <label for="slot-number">Select Parking Slot:</label>
+          <select name="slot-number" id="slot-number">
+            {% for slot in available_slots %}
+              <option value="{{ slot }}">{{ slot }}</option>
+            {% endfor %}
+          </select>
+          <br>
+          <button type="submit">Park Car</button>
+        </form>
+      {% endif %}
     {% endif %}
-    <br><br>
+    <br>
     <p>Available Slots: {{ available_slots }}</p>
+   
   </body>
 </html>
